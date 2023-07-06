@@ -1,6 +1,10 @@
+# About
+
+This is a csm for minetest. What it does is play a sound when certain names/words are mentioned by other players.
+
 # Commands
 
-The main command is alert. If the first argument is "on" or "off" it will enable or disable alerts. There can be any number of other arguments. For each one beginning with "+" it will add that name to the nicknames list, and each beginning with "-" will be removed, while -* will remove all nicknames. Other prefixes are [a+ a- a-*] for the *accept* list, [r+ r- r-*] for the *reject* list, and [f+ f- f*] for the *friends* list.
+The main command is alert. If the first argument is "on" or "off" it will enable or disable alerts. There can be any number of other arguments. For each one beginning with "+" it will add that name to the nicknames list, and each beginning with "-" will be removed, while -* will remove all nicknames. Other prefixes are [a+ a- a-\*] for the *accept* list, [r+ r- r-\*] for the *reject* list, and [f+ f- f\*] for the *friends* list.
 
 If alert has no argument, or any other than on or off, it will print the current status  
 
