@@ -30,7 +30,7 @@ local function get_list(list)
 end
 
 local function set_list(list, names)
-    new_list = ""
+    local new_list = ""
     for i, n in pairs(names) do
         if i == 1 then
             new_list = new_list .. n
@@ -42,6 +42,22 @@ local function set_list(list, names)
     if #new_list > 0 then
         print(minetest.colorize(colors["other"], "List " .. list .. " includes: " .. new_list))
     end
+end
+
+local function modify_list(list, item, prefix)
+    local modified_list = get_list(list)
+    if string.match(item, "^" .. prefix .. "%-%*") then
+        modified_list = {}
+    elseif string.match(item, "^" .. prefix .. "%+") then
+        table.insert(modified_list, string.sub(item, 2 + #prefix))
+    elseif string.match(item, "^" .. prefix .. "%-") then
+        for i, b in pairs(modified_list) do
+            if b == string.sub(item, 2 + #prefix) then
+                modified_list[i] = nil
+            end
+        end
+    end
+    return modified_list
 end
 
 minetest.register_chatcommand("alert", {
@@ -63,48 +79,10 @@ minetest.register_chatcommand("alert", {
         local reject = get_list("reject")
         local friends = get_list("friends")
         for _, a in pairs(args) do
-            print(a)
-            if string.match(a, "^%-%*") then
-                nicknames = {}
-            elseif string.match(a, "^%+") then
-                table.insert(nicknames, string.sub(a, 2))
-            elseif string.match(a, "^%-") then
-                for i, b in pairs(nicknames) do
-                    if b == string.sub(a, 2) then
-                        nicknames[i] = nil
-                    end
-                end
-            elseif string.match(a, "^a%-%*") then
-                accept = {}
-            elseif string.match(a, "^a%+") then
-                table.insert(accept, string.sub(a, 3))
-            elseif string.match(a, "^a%-") then
-                for i, b in pairs(accept) do
-                    if b == string.sub(a, 3) then
-                        accept[i] = nil
-                    end
-                end
-            elseif string.match(a, "^r%-%*") then
-                reject = {}
-            elseif string.match(a, "^r%+") then
-                table.insert(reject, string.sub(a, 3))
-            elseif string.match(a, "^r%-") then
-                for i, b in pairs(reject) do
-                    if b == string.sub(a, 3) then
-                        reject[i] = nil
-                    end
-                end
-            elseif string.match(a, "^f%-%*") then
-                friends = {}
-            elseif string.match(a, "^f%+") then
-                table.insert(friends, string.sub(a, 3))
-            elseif string.match(a, "^f%-") then
-                for i, b in pairs(friends) do
-                    if b == string.sub(a, 3) then
-                        friends[i] = nil
-                    end
-                end
-            end
+            nicknames = modify_list("nicknames", a, "")
+            accept = modify_list("accept", a, "a")
+            reject = modify_list("reject", a, "r")
+            friends = modify_list("friends", a, "f")
         end
         set_list("nicknames", nicknames)
         set_list("accept", accept)
