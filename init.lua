@@ -100,8 +100,8 @@ local function match_list(list, message)
 end
 
 local function match_name(name, message)
-    local from = string.match(message, "<([%w%-_]+)>")
-    local me = string.match(message, "%*%s([%w%-_]+)")
+    local from = string.match(message, "^<([%w%-_]+)>")
+    local me = string.match(message, "^%*%s([%w%-_]+)")
     local sender = name
     local acceptable = match_list(get_list("accept"), message)
     local rejectable = match_list(get_list("reject"), message)
@@ -116,9 +116,9 @@ local function match_name(name, message)
         return true
     elseif valid and match_list(get_list("nicknames"), message) then
         return true
-    elseif string.match(message, "PM from") then
+    elseif string.match(message, "^PM from") then
         return true
-    elseif match_list(get_list("friends"), message) and string.match(message, "joined%sthe%sgame") then
+    elseif match_list(get_list("friends"), message) and string.match(message, "^%*%*%*%s[%w%-_]+%sjoined%sthe%sgame") then
         return true
     else
         return false
@@ -128,7 +128,7 @@ end
 minetest.register_on_receiving_chat_message(function(message)
     if minetest.localplayer and storage:get_string("alert") == "on" then
         local name = minetest.localplayer:get_name()
-        if match_name(name, message) then
+        if match_name(name, minetest.strip_colors(message)) then
             minetest.sound_play("mention_sound")
         end
     end
