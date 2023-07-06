@@ -92,7 +92,10 @@ minetest.register_chatcommand("alert", {
     
 local function match_list(list, message)
     for _, a in pairs(list) do
-        if string.match(message, "[^%w%-_]"..a.."[^%w%-_]*") then
+        if string.match(message, "%W"..a.."%W") or 
+           string.match(message, "%W"..a.."$") or
+           string.match(message, "^"..a.."%W") or
+           string.match(message, "^"..a.."$") then
             return true
         end
     end
