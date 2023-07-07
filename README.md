@@ -8,7 +8,7 @@ The main command is alert. If the first argument is "on" or "off" it will enable
 
 If alert has no argument, or any other than on or off, it will print the current status  
 
-The other commans are alert_reset to erase all nicknames, and alert_test to play the alert sound.
+The other commands are alert_reset to erase all lists, and alert_test to play the mention sound.
 
 # Lists
 
