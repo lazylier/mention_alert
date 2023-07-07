@@ -39,8 +39,11 @@ local function set_list(list, names)
         end
     end
     storage:set_string(list, new_list)
-    if #new_list > 0 then
-        print(minetest.colorize(colors["other"], "List " .. list .. " includes: " .. new_list))
+end
+
+local function show_list(list)
+    if #list > 0 then
+        print(minetest.colorize(colors["other"], "List " .. list .. " includes: " .. storage:get_string(list)))
     end
 end
 
@@ -80,14 +83,14 @@ minetest.register_chatcommand("alert", {
         local friends = get_list("friends")
         for _, a in pairs(args) do
             nicknames = modify_list("nicknames", a, "")
+            set_list("nicknames", nicknames)
             accept = modify_list("accept", a, "a")
+            set_list("accept", accept)
             reject = modify_list("reject", a, "r")
+            set_list("reject", reject)
             friends = modify_list("friends", a, "f")
+            set_list("friends", friends)
         end
-        set_list("nicknames", nicknames)
-        set_list("accept", accept)
-        set_list("reject", reject)
-        set_list("friends", friends)
     end})
     
 local function match_list(list, message)
