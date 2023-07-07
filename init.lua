@@ -91,6 +91,10 @@ minetest.register_chatcommand("alert", {
             friends = modify_list("friends", a, "f")
             set_list("friends", friends)
         end
+        show_list("nicknames")
+        show_list("accept")
+        show_list("reject")
+        show_list("friends")
     end})
     
 local function match_list(list, message)
