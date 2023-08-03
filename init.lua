@@ -82,7 +82,7 @@ minetest.register_chatcommand("alert", {
         local reject = get_list("reject")
         local friends = get_list("friends")
         for _, a in pairs(args) do
-            nicknames = modify_list("nicknames", a, "")
+            nicknames = modify_list("nicknames", a:lower(), "")
             set_list("nicknames", nicknames)
             accept = modify_list("accept", a, "a")
             set_list("accept", accept)
@@ -131,7 +131,7 @@ local function match_name(name, message)
     local valid = ((sender ~= name) or acceptable) and not rejectable
     if valid and string.match(message, name) then
         return true
-    elseif valid and match_list(get_list("nicknames"), message) then
+    elseif valid and match_list(get_list("nicknames"), message:lower()) then
         return true
     elseif string.match(message, "^PM from") then
         return true
